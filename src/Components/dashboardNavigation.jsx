@@ -37,8 +37,11 @@ const drawerWidth = 240;
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#FF7900',
+      main: '#fa9b46',
     },
+    secondary: {
+      main: '#02BA0F',
+    }
   },
 });
 
