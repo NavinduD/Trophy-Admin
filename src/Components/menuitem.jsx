@@ -2,12 +2,12 @@ import React from 'react';
 import { ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { NavLink as RouterLink } from 'react-router-dom';
 
-const MenuItem = ({ text, icon, open, selected, link }) => {
+const MenuItem = ({ text, icon, open, selected = false, link = '' }) => {
   return (
     <ListItem disablePadding sx={{ display: 'block' }}>
       <ListItemButton
         component={RouterLink}
-        to={link}
+        to={link || '/'}  
         selected={selected}
         sx={{
           minHeight: 48,

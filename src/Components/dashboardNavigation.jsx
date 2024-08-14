@@ -29,8 +29,18 @@ import CoinRedeemHistory from "./dashboard/coin.jsx";
 import Blogs from "./dashboard/blog.jsx";
 import Employees from "./dashboard/emplyee.jsx";
 import AdminIntro from "./dashboard/admin-intro.jsx";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const drawerWidth = 240;
+
+const defaultTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#FF7900',
+    },
+  },
+});
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -126,89 +136,109 @@ const Dashboard = () => {
     }
   };
 
+  const handleLogout = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      localStorage.removeItem('token');
+    }
+    navigate('/');
+  };
+
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {getTitle()}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          <MenuItem
-            text="Dashboard"
-            icon={<DashboardIcon />}
-            open={open}
-            selected={location.pathname === "/dashboard/dashboard"}
-            link={"dashboard"}
-          />
-          <MenuItem
-            text="Employees"
-            icon={<PeopleIcon />}
-            open={open}
-            selected={location.pathname === "/dashboard/employees"}
-            link={"employees"}
-          />
-          <MenuItem
-            text="Coin Redeem History"
-            icon={<RedeemIcon />}
-            open={open}
-            selected={location.pathname === "/dashboard/coin-redeem-history"}
-            link={"coin-redeem-history"}
-          />
-          <MenuItem
-            text="Blogs"
-            icon={<ArticleIcon />}
-            open={open}
-            selected={location.pathname === "/dashboard/blogs"}
-            link={"blogs"}
-          />
-          <MenuItem
-            text="Admin Roles"
-            icon={<AdminPanelSettingsIcon />}
-            open={open}
-            selected={location.pathname === "/dashboard/admin-roles"}
-            link={"admin-roles"}
-          />
-        </List>
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        <Routes>
-          <Route index element={<AdminIntro />} />
-          <Route path="dashboard" element={<DashboardContent />} />
-          <Route path="admin-roles" element={<AdminRoles />} />
-          <Route path="coin-redeem-history" element={<CoinRedeemHistory />} />
-          <Route path="blogs" element={<Blogs />} />
-          <Route path="employees" element={<Employees />} />
-        </Routes>
+    <ThemeProvider theme={defaultTheme}>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar position="fixed" open={open}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: 5,
+                ...(open && { display: "none" }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div">
+              {getTitle()}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "rtl" ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            <MenuItem
+              text="Dashboard"
+              icon={<DashboardIcon />}
+              open={open}
+              selected={location.pathname === "/dashboard/dashboard"}
+              link={"dashboard"}
+            />
+            <MenuItem
+              text="Employees"
+              icon={<PeopleIcon />}
+              open={open}
+              selected={location.pathname === "/dashboard/employees"}
+              link={"employees"}
+            />
+            <MenuItem
+              text="Coin Redeem History"
+              icon={<RedeemIcon />}
+              open={open}
+              selected={location.pathname === "/dashboard/coin-redeem-history"}
+              link={"coin-redeem-history"}
+            />
+            <MenuItem
+              text="Blogs"
+              icon={<ArticleIcon />}
+              open={open}
+              selected={location.pathname === "/dashboard/blogs"}
+              link={"blogs"}
+            />
+            <MenuItem
+              text="Admin Roles"
+              icon={<AdminPanelSettingsIcon />}
+              open={open}
+              selected={location.pathname === "/dashboard/admin-roles"}
+              link={"admin-roles"}
+            />
+          </List>
+          <Divider />
+          <div onClick={handleLogout}>
+          <List>
+            <MenuItem
+              text="Logout"
+              icon={<LogoutIcon />}
+              open={open}
+            />
+          </List>
+          </div>
+        </Drawer>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <DrawerHeader />
+          <Routes>
+            <Route index element={<AdminIntro />} />
+            <Route path="dashboard" element={<DashboardContent />} />
+            <Route path="admin-roles" element={<AdminRoles />} />
+            <Route path="coin-redeem-history" element={<CoinRedeemHistory />} />
+            <Route path="blogs" element={<Blogs />} />
+            <Route path="employees" element={<Employees />} />
+          </Routes>
+        </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 };
 
