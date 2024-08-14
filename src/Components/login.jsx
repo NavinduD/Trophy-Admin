@@ -69,6 +69,8 @@ export default function SignIn() {
         }
         console.log('Login successful!');
         navigate('/dashboard');
+      } else if(response.status === 401) {
+        console.error(response.message);
       } else {
         console.error('Login failed.');
       }
