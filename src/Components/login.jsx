@@ -19,7 +19,7 @@ import { RememberMe } from '@mui/icons-material';
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#FF7900',
+      main: '#fa9b46',
     },
   },
 });
@@ -69,6 +69,8 @@ export default function SignIn() {
         }
         console.log('Login successful!');
         navigate('/dashboard');
+      } else if(response.status === 401) {
+        console.error(response.message);
       } else {
         console.error('Login failed.');
       }
