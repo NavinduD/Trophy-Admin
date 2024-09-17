@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Typography, Paper, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { Delete } from '@mui/icons-material';
-import { RenderDelta } from 'quill-delta-to-react';
-
 
 const Blogs = () => {
   const [open, setOpen] = useState(false);
@@ -13,7 +12,7 @@ const Blogs = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get('http://localhost:80/api/fetchBlogs'); 
+        const response = await axios.get('http://localhost:80/api/fetchBlogs');
         setBlogs(response.data);
       } catch (error) {
         console.error(error);
@@ -33,6 +32,14 @@ const Blogs = () => {
     setSelectedBlog(null);
   };
 
+  const convertDeltaToHtml = (delta) => {
+    if (!delta || !Array.isArray(delta.ops)) return '';
+    
+    const converter = new QuillDeltaToHtmlConverter(delta.ops, {});
+    console.log(converter.convert());
+    return converter.convert();
+  };
+
   return (
     <div>
       <TableContainer component={Paper}>
@@ -50,7 +57,7 @@ const Blogs = () => {
                 <TableCell sx={{display:'flex', gap:'10px', alignItems:'center'}}>
                   <Button onClick={() => handleReview(blog)}>Review</Button>
                   <Delete 
-                    onClick={() => handleDelete(employee.userName)} 
+                    onClick={() => handleDelete(blog.articleId)} 
                     sx={{cursor:'pointer'}}
                   />
                 </TableCell>
@@ -59,24 +66,16 @@ const Blogs = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle>Blog Details</DialogTitle>
         <DialogContent>
           {selectedBlog && (
             <div>
               <Typography variant="h4">{selectedBlog.title}</Typography>
               <Typography variant="h5">{selectedBlog.subtitle}</Typography>
-              <Typography variant="body">{selectedBlog.content}</Typography>
-              {/* Use a rich text editor or custom component to display content */}
-              {/* <RenderDelta
-                content={selectedBlog.content}
-                renderEmbed={(embed, children) => {
-                  if (embed.type === 'image') {
-                    return <img src={embed.value.url} alt={embed.value.alt} />;
-                  }
-                  return <div>Unknown embed: {JSON.stringify(embed)}</div>;
-                }}
-              /> */}
+              <div 
+                dangerouslySetInnerHTML={{ __html: convertDeltaToHtml(selectedBlog.content) }}
+              />
             </div>
           )}
         </DialogContent>

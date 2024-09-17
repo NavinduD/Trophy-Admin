@@ -79,6 +79,7 @@ const Employees = () => {
 
     if(response.status === 200 ){
       console.log('Employee added successfully!');
+      handleClose();
     }else{
       console.error('There was an error adding the employee!');
     }
