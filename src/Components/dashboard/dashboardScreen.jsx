@@ -9,10 +9,59 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { PieChart } from "@mui/x-charts/PieChart";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+
+function createData(Rank, Name, Redeems, Department, Email_Address) {
+  return { Rank, Name, Redeems, Department, Email_Address };
+}
+
+const rows = [
+  createData(
+    1,
+    "Daniel Foster",
+    5159,
+    "Finance",
+    "daniel.foster@finance.company.com"
+  ),
+  createData(
+    2,
+    "Henry Lawson",
+    4237,
+    "Sales",
+    "henry.lawson@sales.company.com"
+  ),
+  createData(
+    3,
+    "James Mitchell",
+    3262,
+    "Operations",
+    "james.mitchell@operations.company.com"
+  ),
+  createData(
+    4,
+    "Sophia Reynolds",
+    3105,
+    "HR",
+    "sophia.reynolds@hr.company.com"
+  ),
+  createData(
+    5,
+    "Emma Richardson",
+    3056,
+    "Administration",
+    "emma.richardson@hr.company.com"
+  ),
+];
 
 const DashboardContent = () => {
   return (
-    <dev className="dashboardContainer">
+    <div className="dashboardContainer">
       <div className="item1 gridBG">
         <span className="ecTitle">Empolyee Count</span>
         <span className="ecCount">300</span>
@@ -82,7 +131,41 @@ const DashboardContent = () => {
           <ControlPointIcon sx={{ fontSize: 100, color: "#fa9b46" }} />
         </div>
       </div>
-    </dev>
+      <div className="item9 gridBG">
+        <span className="ecTitle">Top Empolyees</span>
+        <div className="table">
+          <TableContainer>
+            <Table sx={{ minWidth: "100%" }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Rank</TableCell>
+                  <TableCell align="center">Name</TableCell>
+                  <TableCell align="center">Redeems</TableCell>
+                  <TableCell align="center">Department</TableCell>
+                  <TableCell align="center">Email Address</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow
+                    key={row.Rank}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.Rank}
+                    </TableCell>
+                    <TableCell align="center">{row.Name}</TableCell>
+                    <TableCell align="center">{row.Redeems}</TableCell>
+                    <TableCell align="center">{row.Department}</TableCell>
+                    <TableCell align="center">{row.Email_Address}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      </div>
+    </div>
   );
 };
 
