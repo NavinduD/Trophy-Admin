@@ -31,6 +31,8 @@ import Employees from "./dashboard/emplyee.jsx";
 import AdminIntro from "./dashboard/admin-intro.jsx";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LogoutIcon from '@mui/icons-material/Logout';
+import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import ManageActivities from "./dashboard/activity.jsx";
 
 const drawerWidth = 240;
 
@@ -134,6 +136,8 @@ const Dashboard = () => {
         return "Blogs";
       case "/dashboard/admin-roles":
         return "Admin Roles";
+      case "/dashboard/activities":
+        return "Manage Activities";
       default:
         return "Admin Panel";
     }
@@ -217,6 +221,13 @@ const Dashboard = () => {
               selected={location.pathname === "/dashboard/admin-roles"}
               link={"admin-roles"}
             />
+            <MenuItem
+              text="Manage Activities"
+              icon={<LocalActivityIcon />}
+              open={open}
+              selected={location.pathname === "/dashboard/activities"}
+              link={"activities"}
+            />
           </List>
           <Divider />
           <div onClick={handleLogout}>
@@ -238,6 +249,7 @@ const Dashboard = () => {
             <Route path="coin-redeem-history" element={<CoinRedeemHistory />} />
             <Route path="blogs" element={<Blogs />} />
             <Route path="employees" element={<Employees />} />
+            <Route path="activities" element={<ManageActivities />} />
           </Routes>
         </Box>
       </Box>

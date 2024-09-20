@@ -15,7 +15,7 @@ const Blogs = () => {
         const response = await axios.get('http://localhost:80/api/fetchBlogs');
         setBlogs(response.data);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching blogs:', error);
       }
     };
 
@@ -32,12 +32,51 @@ const Blogs = () => {
     setSelectedBlog(null);
   };
 
-  const convertDeltaToHtml = (delta) => {
-    if (!delta || !Array.isArray(delta.ops)) return '';
-    
-    const converter = new QuillDeltaToHtmlConverter(delta.ops, {});
-    console.log(converter.convert());
-    return converter.convert();
+  const handleDelete = async (articleId) => {
+    try {
+      const response = await axios.delete(`http://localhost:80/api/deleteBlog/${articleId}`);
+      if (response.status === 200) {
+        setBlogs(blogs.filter(blog => blog.articleId !== articleId));
+        console.log('Blog deleted successfully');
+      } else {
+        console.warn('Unexpected status code:', response.status);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error('Error deleting blog:', error.response.data.message);
+      } else {
+        console.error('Error deleting blog:', error.message);
+      }
+    }
+  };
+  
+  const handleAccept = async (articleId) => {
+    try {
+      const response = await axios.post(`http://localhost:80/api/acceptBlog/${articleId}`);
+      if (response.status === 200) {
+        setBlogs(blogs.filter(blog => blog.articleId !== articleId));
+        setOpen(false);
+        console.log('Blog accepted successfully');
+      } else {
+        console.warn('Unexpected status code:', response.status);
+      }
+    } catch (error) {
+      if (error.response) {
+        console.error('Error accepting blog:', error.response.data.message);
+      } else {
+        console.error('Error accepting blog:', error.message);
+      }
+    }
+  };
+  
+
+  const convertContentToHtml = (content) => {
+    const parsedContent = JSON.parse(content);
+    console.log(parsedContent);
+    const converter = new QuillDeltaToHtmlConverter(parsedContent, {inlineStyles: true, customCssClasses: true});
+    const html = converter.convert();
+    console.log(html);
+    return html;
   };
 
   return (
@@ -71,16 +110,27 @@ const Blogs = () => {
         <DialogContent>
           {selectedBlog && (
             <div>
-              <Typography variant="h4">{selectedBlog.title}</Typography>
+              <img 
+                src={selectedBlog.imageUrl} 
+                alt={selectedBlog.title} 
+                style={{ 
+                  width: '100%',
+                  height: '400px', 
+                  objectFit: 'cover',
+                  borderRadius: '20px', 
+                  marginBottom: '20px'
+                }} 
+              />
+              <Typography variant="h3">{selectedBlog.title}</Typography>
               <Typography variant="h5">{selectedBlog.subtitle}</Typography>
               <div 
-                dangerouslySetInnerHTML={{ __html: convertDeltaToHtml(selectedBlog.content) }}
+                dangerouslySetInnerHTML={{ __html: convertContentToHtml(selectedBlog.content) }}
               />
             </div>
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Accept</Button>
+          <Button onClick={() => handleAccept(selectedBlog.articleId)}>Accept</Button>
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
