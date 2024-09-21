@@ -19,6 +19,7 @@ import {
   Box,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import imageCompression from "browser-image-compression"; // Import the compression library
 
 const ManageHackathons = () => {
   const [hackathons, setHackathons] = useState([]);
@@ -35,31 +36,37 @@ const ManageHackathons = () => {
   const [previewHackImage, setPreviewHackImage] = useState(null);
   const [previewHackMainImage, setPreviewHackMainImage] = useState(null);
 
+  const handleImageChange = async (e, setImage, setPreview) => {
+    const file = e.target.files[0];
+    if (file) {
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1280,
+        useWebWorker: true,
+      };
+      try {
+        const compressedFile = await imageCompression(file, options);
+        setImage(compressedFile);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result);
+        };
+        reader.readAsDataURL(compressedFile);
+      } catch (error) {
+        console.error("Error compressing image:", error);
+      }
+    }
+  };
+  
   const handleHackImageChange = (e) => {
-    const file = e.target.files[0];
-    setHackImage(file);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviewHackImage(reader.result);
-    };
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    handleImageChange(e, setHackImage, setPreviewHackImage);
   };
-
+  
   const handleHackMainImageChange = (e) => {
-    const file = e.target.files[0];
-    setHackMainImage(file);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviewHackMainImage(reader.result);
-    };
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    handleImageChange(e, setHackMainImage, setPreviewHackMainImage);
   };
+  
 
-  // Fetch hackathons from the backend
   const fetchHackathons = async () => {
     try {
       const response = await axios.get("http://localhost:80/api/Hackathons");
@@ -73,7 +80,6 @@ const ManageHackathons = () => {
     fetchHackathons();
   }, []);
 
-  // Handle dialog open/close
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -85,14 +91,14 @@ const ManageHackathons = () => {
     });
     setHackImage(null);
     setHackMainImage(null);
+    setPreviewHackImage(null);
+    setPreviewHackMainImage(null); 
   };
 
-  // Handle input changes for new hackathon form
   const handleInputChange = (e) => {
     setNewHackathon({ ...newHackathon, [e.target.name]: e.target.value });
   };
 
-  // Add new hackathon with image uploads
   const handleAddHackathon = async () => {
     setIsLoading(true);
     const formData = new FormData();

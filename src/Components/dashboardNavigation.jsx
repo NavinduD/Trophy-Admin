@@ -35,6 +35,8 @@ import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import ManageActivities from "./dashboard/activity.jsx";
 import CodeIcon from '@mui/icons-material/Code';
 import ManageHackathons from "./dashboard/hackathon.jsx";
+import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
+import ManageSports from "./dashboard/sport.jsx";
 
 const drawerWidth = 240;
 
@@ -142,6 +144,8 @@ const Dashboard = () => {
         return "Manage Activities";
       case "/dashboard/hackathon":
         return "Manage Hackathons";
+      case "/dashboard/sport":
+        return "Sport clubs & Socities";
       default:
         return "Admin Panel";
     }
@@ -239,6 +243,13 @@ const Dashboard = () => {
               selected={location.pathname === "/dashboard/hackathon"}
               link={"hackathon"}
             />
+            <MenuItem
+              text="Sport clubs & Socities"
+              icon={<SportsBasketballIcon />}
+              open={open}
+              selected={location.pathname === "/dashboard/sport"}
+              link={"sport"}
+            />
           </List>
           <Divider />
           <div onClick={handleLogout}>
@@ -262,6 +273,7 @@ const Dashboard = () => {
             <Route path="employees" element={<Employees />} />
             <Route path="activities" element={<ManageActivities />} />
             <Route path="hackathon" element={<ManageHackathons />} />
+            <Route path="sport" element={<ManageSports />} />
           </Routes>
         </Box>
       </Box>

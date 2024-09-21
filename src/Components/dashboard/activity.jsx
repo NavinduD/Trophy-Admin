@@ -41,28 +41,38 @@ const ManageActivities = () => {
   const [viewUsersOpen, setViewUsersOpen] = useState(false);
   const [registeredUsers, setRegisteredUsers] = useState([]);
 
-  const handleMainImageChange = (e) => {
+  const handleImageChange = async (e, setPreviewImage, setImageState, imageFieldName) => {
     const file = e.target.files[0];
-    setNewActivity({ ...newActivity, activitiesmainimgUrl: file });
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviewMainImage(reader.result);
-    };
     if (file) {
-      reader.readAsDataURL(file);
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1280, 
+        useWebWorker: true,
+      };
+      
+      try {
+        const compressedFile = await imageCompression(file, options);
+        
+        setImageState({ ...newActivity, [imageFieldName]: compressedFile });
+        
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewImage(reader.result);
+        };
+        reader.readAsDataURL(compressedFile);
+        
+      } catch (error) {
+        console.error("Error compressing the image:", error);
+      }
     }
   };
-
+  
+  const handleMainImageChange = (e) => {
+    handleImageChange(e, setPreviewMainImage, setNewActivity, "activitiesmainimgUrl");
+  };
+  
   const handleCardImageChange = (e) => {
-    const file = e.target.files[0];
-    setNewActivity({ ...newActivity, imageUrl: file });
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviewCardImage(reader.result);
-    };
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+    handleImageChange(e, setPreviewCardImage, setNewActivity, "imageUrl");
   };
 
   // Fetch activities from the backend
@@ -112,8 +122,8 @@ const ManageActivities = () => {
     formData.append("activitydate", newActivity.activitydate);
     formData.append("activitytime", newActivity.activitytime);
     formData.append("activityvenue", newActivity.activityvenue);
-    formData.append("activitiesmainimg", mainImage); // Add main image file
-    formData.append("cardimg", cardImage); // Add card image file
+    formData.append("activitiesmainimg", mainImage); 
+    formData.append("cardimg", cardImage); 
 
     try {
       const response = await axios.post(
