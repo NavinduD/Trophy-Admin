@@ -33,6 +33,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import ManageActivities from "./dashboard/activity.jsx";
+import CodeIcon from '@mui/icons-material/Code';
+import ManageHackathons from "./dashboard/hackathon.jsx";
 
 const drawerWidth = 240;
 
@@ -138,6 +140,8 @@ const Dashboard = () => {
         return "Admin Roles";
       case "/dashboard/activities":
         return "Manage Activities";
+      case "/dashboard/hackathon":
+        return "Manage Hackathons";
       default:
         return "Admin Panel";
     }
@@ -228,6 +232,13 @@ const Dashboard = () => {
               selected={location.pathname === "/dashboard/activities"}
               link={"activities"}
             />
+            <MenuItem
+              text="Manage Hackathon"
+              icon={<CodeIcon />}
+              open={open}
+              selected={location.pathname === "/dashboard/hackathon"}
+              link={"hackathon"}
+            />
           </List>
           <Divider />
           <div onClick={handleLogout}>
@@ -250,6 +261,7 @@ const Dashboard = () => {
             <Route path="blogs" element={<Blogs />} />
             <Route path="employees" element={<Employees />} />
             <Route path="activities" element={<ManageActivities />} />
+            <Route path="hackathon" element={<ManageHackathons />} />
           </Routes>
         </Box>
       </Box>
