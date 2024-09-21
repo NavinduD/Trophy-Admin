@@ -31,6 +31,12 @@ import Employees from "./dashboard/emplyee.jsx";
 import AdminIntro from "./dashboard/admin-intro.jsx";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LogoutIcon from '@mui/icons-material/Logout';
+import LocalActivityIcon from '@mui/icons-material/LocalActivity';
+import ManageActivities from "./dashboard/activity.jsx";
+import CodeIcon from '@mui/icons-material/Code';
+import ManageHackathons from "./dashboard/hackathon.jsx";
+import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
+import ManageSports from "./dashboard/sport.jsx";
 
 const drawerWidth = 240;
 
@@ -134,6 +140,12 @@ const Dashboard = () => {
         return "Blogs";
       case "/dashboard/admin-roles":
         return "Admin Roles";
+      case "/dashboard/activities":
+        return "Manage Activities";
+      case "/dashboard/hackathon":
+        return "Manage Hackathons";
+      case "/dashboard/sport":
+        return "Sport clubs & Socities";
       default:
         return "Admin Panel";
     }
@@ -217,6 +229,27 @@ const Dashboard = () => {
               selected={location.pathname === "/dashboard/admin-roles"}
               link={"admin-roles"}
             />
+            <MenuItem
+              text="Manage Activities"
+              icon={<LocalActivityIcon />}
+              open={open}
+              selected={location.pathname === "/dashboard/activities"}
+              link={"activities"}
+            />
+            <MenuItem
+              text="Manage Hackathon"
+              icon={<CodeIcon />}
+              open={open}
+              selected={location.pathname === "/dashboard/hackathon"}
+              link={"hackathon"}
+            />
+            <MenuItem
+              text="Sport clubs & Socities"
+              icon={<SportsBasketballIcon />}
+              open={open}
+              selected={location.pathname === "/dashboard/sport"}
+              link={"sport"}
+            />
           </List>
           <Divider />
           <div onClick={handleLogout}>
@@ -238,6 +271,9 @@ const Dashboard = () => {
             <Route path="coin-redeem-history" element={<CoinRedeemHistory />} />
             <Route path="blogs" element={<Blogs />} />
             <Route path="employees" element={<Employees />} />
+            <Route path="activities" element={<ManageActivities />} />
+            <Route path="hackathon" element={<ManageHackathons />} />
+            <Route path="sport" element={<ManageSports />} />
           </Routes>
         </Box>
       </Box>
