@@ -152,13 +152,13 @@ const Employees = () => {
                 <TableCell>{employee.NIC}</TableCell>
                 <TableCell>{new Date(employee.bday).toLocaleDateString()}</TableCell>
                 <TableCell sx={{display:'flex', gap:'10px', alignItems:'center'}}>
-                  <Button 
+                  <button 
                     variant="outlined" 
                     color="secondary" 
                     onClick={() => handleSendResetPassword(employee.userName)}
                   >
                     Send a OTP
-                  </Button>
+                  </button>
                   <Delete 
                     onClick={() => handleDelete(employee.userName)} 
                     sx={{cursor:'pointer'}}

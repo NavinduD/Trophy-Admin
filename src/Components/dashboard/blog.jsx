@@ -130,8 +130,8 @@ const Blogs = () => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleAccept(selectedBlog.articleId)}>Accept</Button>
-          <Button onClick={handleClose}>Close</Button>
+          <button onClick={() => handleAccept(selectedBlog.articleId)}>Accept</button>
+          <button onClick={handleClose}>Close</button>
         </DialogActions>
       </Dialog>
     </div>
