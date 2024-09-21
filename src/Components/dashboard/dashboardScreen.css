@@ -1,0 +1,160 @@
+.dashboardContainer{
+    background-color: white;
+    position: absolute;
+    top: 64px;
+    left: 64px;
+    margin: 0px;
+    padding: 20px;
+    width: calc(100vw - 78px);
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    grid-template-rows: 200px 200px 200px 200px 200px;
+    gap: 20px;
+}
+
+.gridBG{
+    background-color: white;
+    -webkit-box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.2);
+    border-radius: 10px;   
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    padding:10px;  
+}
+
+.dashboardContainer > .item1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    padding:20px; 
+    grid-row: 1/2;
+}   
+
+.item1 > .item-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    flex: 1;
+}
+
+.dashboardContainer .ecTitle{
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.dashboardContainer .ecCount{
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.dashboardContainer > .item2{
+    grid-row: 1/3;
+    grid-column: 2/6;
+    gap: 10px;
+    .ecTitle{
+        flex: 1;
+        padding-top: 20px;
+    }
+    .chart{
+        flex: 10;
+        height: 100%;
+        width: 100%;
+    }
+}
+
+.dashboardContainer > .item3{
+    grid-row: 1/2;
+    grid-column: 6/8;
+    gap: 10px;
+    .i3{
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        padding-top: 5px;
+        flex: 1;
+    }
+    .hintTxt{
+        font-size: small;
+        flex: 4;
+        opacity: 50%;
+    }
+}
+
+.dashboardContainer > .item4{
+    grid-row: 2/3;
+    grid-column: 1/2;
+    gap: 10px;
+}
+
+.dashboardContainer > .item5{
+    grid-row: 2/4;
+    grid-column: 6/8;
+    gap: 10px;
+}
+
+.dashboardContainer > .item6{
+    grid-row: 3/4;
+    grid-column: 1/4;
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    .ecTitle{
+        flex: 1;
+        padding-left: 20px;
+    }
+    .pieChart{
+        flex: 6;
+        height: 100%;
+        width: 100%;
+        padding-right: 20px;
+    }
+}
+
+.dashboardContainer > .item7{
+    grid-row: 3/4;
+    grid-column: 4/5;
+    gap: 10px;
+    
+}
+
+.dashboardContainer > .item8{
+    grid-row: 3/4;
+    grid-column: 5/6;
+    gap: 10px;
+}
+
+.item78{
+    display: flex;
+    .btn{
+        display: flex;
+        height: 100px;
+        width: 100px;
+        background-color: rgb(255, 255, 255);
+        border-radius: 50px;
+        cursor: pointer;
+        justify-content: center;
+        align-items:center;
+    }
+}
+
+.dashboardContainer > .item9{
+    grid-row: 4/6;
+    grid-column: 1/8;
+    gap: 10px;
+    width: 100%;
+    .table{
+        width: 100%;
+        height: auto;
+        padding: 0px 20px;
+    }
+}
