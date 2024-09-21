@@ -19,7 +19,8 @@ import {
   Box,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
-import ViewUsersDialog from "../Activity/viewUsersDialog.jsx";
+import QrCode2Icon from '@mui/icons-material/QrCode2';
+import imageCompression from "browser-image-compression";
 
 const ManageActivities = () => {
   const [activities, setActivities] = useState([]);
@@ -38,8 +39,6 @@ const ManageActivities = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [previewMainImage, setPreviewMainImage] = useState(null);
   const [previewCardImage, setPreviewCardImage] = useState(null);
-  const [viewUsersOpen, setViewUsersOpen] = useState(false);
-  const [registeredUsers, setRegisteredUsers] = useState([]);
 
   const handleImageChange = async (e, setPreviewImage, setImageState, imageFieldName) => {
     const file = e.target.files[0];
@@ -115,15 +114,15 @@ const ManageActivities = () => {
   const handleAddActivity = async () => {
     setIsLoading(true);
     const formData = new FormData();
-    formData.append("title", newActivity.title);
-    formData.append("description", newActivity.description);
-    formData.append("coinCount", newActivity.coinCount);
-    formData.append("activitiesdetails", newActivity.activitiesdetails);
-    formData.append("activitydate", newActivity.activitydate);
-    formData.append("activitytime", newActivity.activitytime);
-    formData.append("activityvenue", newActivity.activityvenue);
-    formData.append("activitiesmainimg", mainImage); 
-    formData.append("cardimg", cardImage); 
+    
+    // Append all text fields
+    Object.keys(newActivity).forEach(key => {
+      formData.append(key, newActivity[key]);
+    });
+
+    // Append images if they exist
+    if (mainImage) formData.append("activitiesmainimg", mainImage);
+    if (cardImage) formData.append("cardimg", cardImage);
 
     try {
       const response = await axios.post(
@@ -165,15 +164,19 @@ const ManageActivities = () => {
     }
   };
 
-  const handleViewUsers = async (activityId) => {
+  const handleDownloadQR = async (activityId) => {
     try {
-      const response = await axios.get(
-        `http://localhost:80/api/activity/${activityId}/users`
-      );
-      setRegisteredUsers(response.data);
-      setViewUsersOpen(true);
+      const response = await axios.get(`http://localhost:80/api/getQRCode/${activityId}`);
+      const qrCodeUrl = response.data.qrCodeUrl;
+      
+      const link = document.createElement("a");
+      link.href = qrCodeUrl;
+      link.download = `QR_${activityId}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     } catch (error) {
-      console.error("There was an error fetching the users!", error);
+      console.error("Failed to download QR code", error);
     }
   };
 
@@ -239,13 +242,10 @@ const ManageActivities = () => {
                     width: "200px",
                   }}
                 >
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => handleViewUsers(activity._id)}
-                  >
-                    View Users
-                  </Button>
+                  <QrCode2Icon
+                    onClick={() => handleDownloadQR(activity._id)}
+                    sx={{ cursor: "pointer", marginLeft: "10px" }}
+                  />
                   <Delete
                     onClick={() => handleDeleteActivity(activity._id)}
                     sx={{ cursor: "pointer", marginLeft: "10px" }}
@@ -419,12 +419,6 @@ const ManageActivities = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <ViewUsersDialog
-        open={viewUsersOpen}
-        onClose={() => setViewUsersOpen(false)}
-        users={registeredUsers}
-      />
     </div>
   );
 };
