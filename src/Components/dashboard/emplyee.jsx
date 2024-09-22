@@ -22,14 +22,7 @@ import { Delete } from '@mui/icons-material';
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
   const [open, setOpen] = useState(false);
-  const [newEmployee, setNewEmployee] = useState({ 
-    employeeName: '', 
-    userName: '', 
-    address: '', 
-    phoneNumber: '', 
-    NIC: '', 
-    bday: ''
-  });
+  const [newEmployee, setNewEmployee] = useState({ employeeName: '', userName: '' });
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchEmployees = async () => {
@@ -38,10 +31,6 @@ const Employees = () => {
       const filteredEmployees = response.data.map(employee => ({
         userName: employee.userName,
         employeeName: employee.employeeName,
-        address: employee.address,
-        phoneNumber: employee.phoneNumber,
-        NIC: employee.NIC,
-        bday: employee.bday
       })); 
 
       console.log(filteredEmployees);
@@ -58,7 +47,7 @@ const Employees = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setNewEmployee({ employeeName: '', userName: '', address: '', phoneNumber: '', NIC: '', bday: '' });
+    setNewEmployee({ employeeName: '', userName: '' });
   };
 
   const handleInputChange = (e) => {
@@ -69,14 +58,10 @@ const Employees = () => {
     setIsLoading(true);
     const data = {
       userName: newEmployee.userName,
-      employeeName: newEmployee.employeeName,
-      address: newEmployee.address,
-      phoneNumber: newEmployee.phoneNumber,
-      NIC: newEmployee.NIC,
-      bday: newEmployee.bday
+      employeeName: newEmployee.employeeName
     }
 
-    axios.post('http://localhost:80/api/addempolyee', data, {
+    const response = axios.post('http://localhost:80/api/addempolyee', data, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -92,13 +77,25 @@ const Employees = () => {
         setIsLoading(false);
       });
 
+    if(response.status === 200 ){
+      console.log('Employee added successfully!');
+      handleClose();
+    }else{
+      console.error('There was an error adding the employee!');
+    }
+
   };
 
+
   const handleSendResetPassword = async (email) => {
-    const data = { email: email }
+    const data = {
+      email: email
+    }
     const response = await axios.post('http://localhost:80/api/resetPassword', data,{
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
 
     if(response.status === 200){
@@ -110,10 +107,14 @@ const Employees = () => {
   };
 
   const handleDelete = async (email) => {
-    const data = { email: email }
+    const data = {
+      email: email
+    }
     const response = await axios.post('http://localhost:80/api/deleteempolyee', data,{
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
 
     if(response.status === 200){
@@ -135,22 +136,14 @@ const Employees = () => {
             <TableRow>
               <TableCell>Employee Name</TableCell>
               <TableCell>Username (Email)</TableCell>
-              <TableCell>Address</TableCell>
-              <TableCell>Phone Number</TableCell>
-              <TableCell>NIC</TableCell>
-              <TableCell>Birthday</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {employees.map((employee) => (
-              <TableRow key={employee.userName}>
+              <TableRow key={employee.id}>
                 <TableCell>{employee.employeeName}</TableCell>
                 <TableCell>{employee.userName}</TableCell>
-                <TableCell>{employee.address}</TableCell>
-                <TableCell>{employee.phoneNumber}</TableCell>
-                <TableCell>{employee.NIC}</TableCell>
-                <TableCell>{new Date(employee.bday).toLocaleDateString()}</TableCell>
                 <TableCell sx={{display:'flex', gap:'10px', alignItems:'center'}}>
                   <Button 
                     variant="outlined" 
@@ -191,49 +184,6 @@ const Employees = () => {
             fullWidth
             variant="standard"
             value={newEmployee.userName}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="address"
-            label="Address"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={newEmployee.address}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="phoneNumber"
-            label="Phone Number"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={newEmployee.phoneNumber}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="NIC"
-            label="NIC"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={newEmployee.NIC}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin="dense"
-            name="bday"
-            label="Birthday"
-            type="date"
-            fullWidth
-            variant="standard"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            value={newEmployee.bday}
             onChange={handleInputChange}
           />
         </DialogContent>
